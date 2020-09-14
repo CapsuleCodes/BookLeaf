@@ -1,0 +1,11 @@
+<h1>All Reviews</h1>
+<% @reviews.each do |review| %>
+    <h4><a href="/reviews/<%= review.id %>"><%=review.title %></a></h4>
+    <img src="<%= review.image_url %>" alt="<%= review.title %>" height="200" width="200">
+
+ <br><br>
+    <strong>Created At: <%= review.created_at %></strong>
+    <p><%= review.description %></p>
+    <p>By: <%= review.user.name %></p>
+
+    <% end %>
