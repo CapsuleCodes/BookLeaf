@@ -1,37 +1,69 @@
-class ReviewsController < ApplicationController
+class ReviewsController < ApplicationController  
 
-  # GET: /reviews
-  get "/reviews" do
-    erb :"/reviews/index.html"
+  get '/reviews' do
+      @reviews = Review.all
+      erb :'reviews/index'
   end
 
-  # GET: /reviews/new
   get "/reviews/new" do
-    erb :"/reviews/new.html"
+      if logged_in?
+          erb :"reviews/new"
+      else
+          flash[:error] = "User must log in"
+          redirect "/"
+      end
   end
 
-  # POST: /reviews
   post "/reviews" do
-    redirect "/reviews"
+      @review = Review.new(title: params[:title], image_url: params[:image_url], description: params[:description], user_id: current_user.id)
+      if @review.save
+          flash[:message] = "New review" 
+          redirect "/reviews/#{@review.id}"
+      else
+          flash[:error] = "review failed #{@review.errors.full_messages.to_sentence}"
+      redirect "/reviews/new"
+      end
   end
 
-  # GET: /reviews/5
-  get "/reviews/:id" do
-    erb :"/reviews/show.html"
+
+  get '/reviews/:id' do
+      @review = Review.find(params[:id])
+      erb :"/reviews/show"
   end
 
-  # GET: /reviews/5/edit
-  get "/reviews/:id/edit" do
-    erb :"/reviews/edit.html"
+  get 'reviews/:id/edit' do
+      @review = Review.find(params[:id])
+      if authorized_to_edit?(@review)
+          erb :'/reviews/edit'
+      else
+          flash[:error] = "Not authorized to edit that review!"
+          redirect "/reviews"
+      end
   end
 
-  # PATCH: /reviews/5
-  patch "/reviews/:id" do
-    redirect "/reviews/:id"
+  patch '/reviews/:id' do 
+      #@review = Review.find(params[:id])
+      @review.update(title: params[:title], image_url: params[:image_url], description: params[:description])
+      redirect "/reviews/#{@review.id}"
+  end
+  
+
+  delete '/reviews/:id' do
+     #@review = Review.find(params[:id])
+      set_review
+      redirect_if_not_authorized
+      @review.destroy
+      redirect '/reviews'
   end
 
-  # DELETE: /reviews/5/delete
-  delete "/reviews/:id/delete" do
-    redirect "/reviews"
+private
+
+  def set_review
+    @review = Review.find_by_id(params[:id])
+      if @review.nil?
+       flash[:error] = "Couldn't find a Post with id: #{params[:id]}"
+       redirect "/reviews"
+      end
   end
+
 end
