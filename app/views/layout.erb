@@ -7,19 +7,37 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
 
-    <title>BookLeaf</title>
+    <title>BookReview</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="stylesheet" href="/stylesheets/main.css" />
   </head>
   <body>
+
     <div class="wrapper">
+
+    <% if flash[:error] %>
+    <h3 style="color:red;"><%= flash[:error] %></h3>
+    <% end %>
+
+    <% if flash[:message] %>
+    <h3 style="color:green;"><%= flash[:message] %></h3>
+    <% end %>
+
+
+      <div class="nav">
+        <% if logged_in? %>
+          <a href="/reviews">All Posts</a>
+          <a href="/reviews/new">Create a Book Review</a>
+          <a href="/logout">Log Out</a>
+        <% end %>
+      </div>
 
         <%= yield %>
 
       <footer class="branding">
-        <small>&copy; 2020 <strong>BookLeaf</strong></small>
+        <small>&copy; 2020 <strong>BookReview</strong></small>
       </footer>
     </div>
 
