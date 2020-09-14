@@ -1,0 +1,17 @@
+<h3><%= @review.title %></h3>
+<img src="<%= @review.image_url %>" alt="<%= @review.title %>" height="200" width="200">
+<br><br>
+<strong>Created At: <%= @review.created_at %></strong>
+<p><%= @review.description %></p>
+<p>By: <%= @review.user.name %></p>
+
+<% if authorized_to_edit?(@review) %>
+
+<a href="/reviews/<% @review.id %>/edit">Edit Review</a>
+
+<form class="" action="/reviews/<%= @review.id %>" method="post">
+    <input type="hidden" name="_method" value="delete">
+    <input type="submit" name="" value="Delete This Review">
+</form>
+
+<% end %>
