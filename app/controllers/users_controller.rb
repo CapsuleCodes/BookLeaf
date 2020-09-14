@@ -1,37 +1,51 @@
 class UsersController < ApplicationController
 
-  # GET: /users
-  get "/users" do
-    erb :"/users/index.html"
+    #Render login form
+  get "/login" do                                          #when we send a get request to this route, it renders our login erb file
+    erb :'/users/login'                                  #renders our login form
   end
 
-  # GET: /users/new
-  get "/users/new" do
-    erb :"/users/new.html"
+                                  #receive data from params from the login form via POST route
+                                  #received from form action in login.erb
+                                  #method is post, do block
+                                  #data is sent via POST or Patch route
+                                   #user&&user authenticate is from has_secure_password macro
+                                  #log them in
+                                  #create a key value pair in the session hash using the user_id to actually log in
+                                  #binding.pry, then shotgun /login then enter email in webpage then run params in terminal
+                                  # params key comes from login.erb password and email name
+
+  post "/login" do                                          #receives data from login form(params)
+        @user = User.find_by(email: params[:email])           #find the user  #authenicate user then next step
+     if @user && @user.authenticate(params[:password])      #authenicate our use.take password and 
+        session[:user_id] = @user.id
+        flash[:message] = "Welcome, #{@user.name}!"
+        redirect "/users/#{@user.id}"
+      else 
+        flash[:error] = "Wrong username or password. Please try again!"
+        redirect "/login"
+      end
   end
 
-  # POST: /users
-  post "/users" do
-    redirect "/users"
-  end
-
-  # GET: /users/5
+    #users show route
   get "/users/:id" do
-    erb :"/users/show.html"
+      @user = User.find_by(id: params[:id])
+      erb :'/users/show'
   end
 
-  # GET: /users/5/edit
-  get "/users/:id/edit" do
-    erb :"/users/edit.html"
+  get '/signup' do #get sign up route that renders signup form
+    erb :'/users/signup'
   end
 
-  # PATCH: /users/5
-  patch "/users/:id" do
-    redirect "/users/:id"
+  post '/users' do
+    @user = User.create(params)
+    session[:user_id] = @user.id
+    redirect "/users/#{@user.id}"
   end
 
-  # DELETE: /users/5/delete
-  delete "/users/:id/delete" do
-    redirect "/users"
+  get '/logout' do
+    session.clear
+    redirect '/'
   end
+
 end
