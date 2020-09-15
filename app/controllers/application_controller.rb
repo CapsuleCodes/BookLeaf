@@ -17,18 +17,18 @@ class ApplicationController < Sinatra::Base
     if logged_in?
       redirect "/users/#{current_user.id}"
     else
-      erb :welcome
+      redirect "/signup"
     end
   end
 
- # not_found do
- #   flash[:error] = "Not found"
-  #  if logged_in?
-   #   redirect :'/reviews'
-   # else
-    #  redirect '/'
-   # end
-  #end
+  not_found do
+    flash[:error] = "Not found"
+    if logged_in?
+      redirect :'/reviews'
+    else
+      redirect '/'
+    end
+  end
 
   private
 

@@ -34,6 +34,7 @@ class UsersController < ApplicationController
   end
 
 
+
   get '/signup' do #get sign up route that renders signup form
     erb :'/users/signup'
   end
