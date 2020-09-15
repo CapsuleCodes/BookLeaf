@@ -1,0 +1,12 @@
+<h1>Edit review!</h1>
+
+<form class="" action="/reviews/<%= @review.id %>" method="post">
+  <input type="hidden" name="_method" value="patch">
+  <label for="title">Title:</label>
+  <input type="text" name="title" value ="<%= @review.title %>">
+  <label for="description">Description:</label>
+  <textarea name="description" style="width:auto; height:auto;"><%= @review.description %></textarea>
+  <label for="image_url">Image URL:</label>
+  <input type="text" name="image_url" value ="<%= @review.image_url %>">
+  <input type="submit" name="" value="Edit review">
+</form>
