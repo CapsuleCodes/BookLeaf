@@ -7,9 +7,9 @@
 
 <% if authorized_to_edit?(@review) %>
 
-<a href="/reviews/<% @review.id %>/edit">Edit Review</a>
-
-<form class="" action="/reviews/<%= @review.id %>" method="post">
+<a href="/reviews/<%= @review.id %>/edit">Edit Review</a>
+<br>
+<form method="post" action="/reviews/<%= @review.id %>">
     <input type="hidden" name="_method" value="delete">
     <input type="submit" name="" value="Delete This Review">
 </form>
